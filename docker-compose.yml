@@ -14,8 +14,11 @@ services:
     build:
       context: ./postgres-master
       dockerfile: ./Dockerfile
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - ./.postgres-master/data:/var/lib/postgresql/data
+      - ./postgres-master/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./postgres-master/postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - '5432:5432'
     logging: *default-logging
