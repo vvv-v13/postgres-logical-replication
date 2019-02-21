@@ -8,3 +8,4 @@ CREATE TABLE payments (
 CREATE index ON payments using btree (time_stamp);
 CREATE index ON payments using btree (email);
 
+CREATE SUBSCRIPTION payments_sub CONNECTION 'dbname=postgres host=postgres-master user=postgres' PUBLICATION payments_pub;
