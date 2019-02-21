@@ -1,0 +1,70 @@
+version: '3.4'
+
+x-logging: &default-logging
+  options:
+    max-size: '1m'
+    max-file: '10'
+  driver: json-file
+
+services:
+  postgres-master:
+    restart: always
+    hostname: postgres-master
+    container_name: postgres-master
+    build:
+      context: ./postgres-master
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./.postgres-master/data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    logging: *default-logging
+
+
+  postgres-clients-payments:
+    restart: always
+    hostname: postgres-clients-payments
+    container_name: postgres-clients-payments
+    build:
+      context: ./postgres-clients-payments
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./.postgres-clients-payments/data:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+    links:
+      - postgres-master
+    logging: *default-logging
+
+
+  postgres-payments:
+    restart: always
+    hostname: postgres-payments
+    container_name: postgres-payments
+    build:
+      context: ./postgres-payments
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./.postgres-payments/data:/var/lib/postgresql/data
+    ports:
+      - '5434:5432'
+    links:
+      - postgres-master
+    logging: *default-logging
+
+
+  postgres-payments2:
+    restart: always
+    hostname: postgres-payments2
+    container_name: postgres-payments2
+    build:
+      context: ./postgres-payments2
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./.postgres-payments2/data:/var/lib/postgresql/data
+    ports:
+      - '5435:5432'
+    links:
+      - postgres-master
+    logging: *default-logging
+
